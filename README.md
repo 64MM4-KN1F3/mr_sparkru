@@ -13,14 +13,10 @@ Mr Sparkru is a helper tool that assists with management of models and generated
 *   **Model, Project, and Image Management**: Interactively delete models, projects, and images to free up disk space.
 *   **Interactive Deletion Modes**: A command-line interface for quick deletions and a graphical UI for more detailed management.
 *   **Undo Functionality**: A simple undo system to revert the last deletion action.
-*   **Cross-Platform Support**: Primarily developed for macOS, but designed to be cross-platform compatible.
 
 ## Supported platforms
 
-We will make our best effort for Mr Sparkru to be cross platform via python under the covers however Mr Sparkru is primarily developed for MacOS
-## Supported platforms
-
-While Mr Sparkru is primarily developed and tested on macOS, efforts have been made to ensure cross-platform compatibility using Python. It is expected to function on other Unix-like systems (Linux) and potentially Windows, though specific testing on these platforms may be limited.
+MacOS
 
 ## Installation
 ## Dependencies
