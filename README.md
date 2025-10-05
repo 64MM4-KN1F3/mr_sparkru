@@ -1,6 +1,8 @@
 # ミスタースパーコル (Mr Sparkru) - A QoL tool for the Draw Things app
 
-![Mr. Sparkru](./images/ms_03.png)
+<p align="center">
+  <img src="./images/ms_03.png" style="width: 10vw; min-width: 330px;" />
+</p>
 
 ## What is Mr Sparkru?!
 
