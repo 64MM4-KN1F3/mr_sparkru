@@ -1,7 +1,7 @@
-# My Quirks #
-#############
-NOTES.md
+# Envs #
+###################
 .env
+.venv
 
 # Compiled source #
 ###################
@@ -30,6 +30,7 @@ NOTES.md
 *.log
 *.sql
 *.sqlite
+__pycache__
 
 # OS generated files #
 ######################

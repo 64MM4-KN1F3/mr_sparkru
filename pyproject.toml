@@ -1,0 +1,17 @@
+[project]
+name = "mr-sparkru"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "PyQt6",
+    "pillow",
+    "pre-commit>=4.2.0",
+    "questionary",
+    "flatbuffers",
+    "numpy>=2.3.3",
+]
+
+[project.scripts]
+mr_sparkru_ui = "mr_sparkru_ui:main"
