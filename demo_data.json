@@ -1,0 +1,8 @@
+{
+  "models": ["model1.ckpt", "model2.ckpt", "model3.ckpt"],
+  "projects": {
+    "project1": ["image1.png", "image2.png", "image3.png", "image4.png", "image5.png"],
+    "project2": ["image6.png", "image7.png"],
+    "project3": ["image8.png", "image9.png", "image10.png"]
+  }
+}

@@ -42,7 +42,7 @@ theme = {
 }
 
 class ClickableWidget(QWidget):
-    clicked = pyqtSignal()
+    clicked = pyqtSignal(object, object)  # widget, event
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -75,7 +75,7 @@ class ClickableWidget(QWidget):
             """)
 
     def mousePressEvent(self, event):
-        self.clicked.emit()
+        self.clicked.emit(self, event)
         super().mousePressEvent(event)
 
 class ClearableLineEdit(QLineEdit):
@@ -561,6 +561,9 @@ class App(QMainWindow):
         content_content_layout.addWidget(self.thumbnail_scroll_area)
         content_layout.addLayout(content_content_layout, 2)
 
+        # Initialize thumbnail selection tracking
+        self.last_selected_thumbnail = None
+
         if DEMO_MODE:
             self.load_demo_data()
         self.refresh_lists()
@@ -844,7 +847,7 @@ class App(QMainWindow):
                 text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 thumbnail_layout.addWidget(text_label)
 
-                thumbnail_widget.clicked.connect(lambda: self.toggle_image_selection(thumbnail_widget))
+                thumbnail_widget.clicked.connect(lambda w, e: self.toggle_image_selection(w, e))
                 self.thumbnail_layout.addWidget(thumbnail_widget)
                 image_id += 1
         else:
@@ -891,7 +894,7 @@ class App(QMainWindow):
                                 label.setPixmap(pixmap)
                                 thumbnail_layout.addWidget(label)
 
-                                thumbnail_widget.clicked.connect(lambda: self.toggle_image_selection(thumbnail_widget))
+                                thumbnail_widget.clicked.connect(lambda w, e: self.toggle_image_selection(w, e))
                                 self.thumbnail_layout.addWidget(thumbnail_widget)
 
                 conn.close()
@@ -926,7 +929,7 @@ class App(QMainWindow):
             label.setPixmap(pixmap.scaled(128, 128, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
             thumbnail_layout.addWidget(label)
 
-            thumbnail_widget.clicked.connect(lambda: self.toggle_image_selection(thumbnail_widget))
+            thumbnail_widget.clicked.connect(lambda w, e: self.toggle_image_selection(w, e))
             self.thumbnail_layout.addWidget(thumbnail_widget)
         except Exception as e:
             print(f"Error displaying thumbnail for {project_name}: {e}")
@@ -968,9 +971,47 @@ class App(QMainWindow):
         except FileNotFoundError:
             return 0
 
-    def toggle_image_selection(self, widget):
-        widget.setSelected(not widget.selected)
+    def toggle_image_selection(self, widget, event=None):
+        # Check if shift is pressed for range selection
+        if event and (event.modifiers() & Qt.KeyboardModifier.ShiftModifier):
+            if self.last_selected_thumbnail is not None:
+                # Do range selection from last selected to current
+                start_idx = self.get_thumbnail_index(self.last_selected_thumbnail)
+                end_idx = self.get_thumbnail_index(widget)
+
+                if start_idx != -1 and end_idx != -1:
+                    min_idx = min(start_idx, end_idx)
+                    max_idx = max(start_idx, end_idx)
+
+                    for i in range(min_idx, max_idx + 1):
+                        if i != end_idx:  # Don't toggle the current one twice
+                            item_widget = self.thumbnail_layout.itemAt(i).widget()
+                            item_widget.setSelected(True)
+
+            widget.setSelected(True)  # Ensure current widget is selected
+        else:
+            # Clear previous selections if Control (Cmd) is not pressed
+            if not (event and (event.modifiers() & Qt.KeyboardModifier.ControlModifier)):
+                for i in range(self.thumbnail_layout.count()):
+                    item_widget = self.thumbnail_layout.itemAt(i).widget()
+                    if item_widget != widget:
+                        item_widget.setSelected(False)
+            widget.setSelected(not widget.selected)
+
+        # Update the last selected thumbnail
+        if widget.selected:
+            self.last_selected_thumbnail = widget
+        elif not widget.selected and self.last_selected_thumbnail == widget:
+            self.last_selected_thumbnail = None
+
         self.update_button_states()
+
+    def get_thumbnail_index(self, widget):
+        """Get the index of a thumbnail widget in the grid layout."""
+        for i in range(self.thumbnail_layout.count()):
+            if self.thumbnail_layout.itemAt(i).widget() == widget:
+                return i
+        return -1
 
     def set_sparkru_image(self, image_path):
         pixmap = QPixmap(os.path.join("images", image_path))
