@@ -1,6 +1,6 @@
 # ミスタースパーコル (Mr Sparkru) - A QoL tool for the Draw Things app
 
-*(Image link is currently broken and has been removed)*
+![Mr. Sparkru](./images/ms_03.png)
 
 ## What is Mr Sparkru?!
 
@@ -29,7 +29,7 @@ No other system-level dependencies are strictly required for basic operation, bu
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/mr_sparkru.git
+    git clone https://github.com/64MM4-KN1F3/mr_sparkru.git
     cd mr_sparkru
     ```
 2.  **Create a virtual environment and install dependencies:**
@@ -44,6 +44,8 @@ No other system-level dependencies are strictly required for basic operation, bu
 ## Usage
 
 ### UI Application (`mr_sparkru.py`)
+
+![Mr. Sparkru](./mr_sparkru_screenshot.png)
 
 The UI application provides a graphical interface for managing your files.
 
