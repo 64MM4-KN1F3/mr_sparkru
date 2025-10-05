@@ -56,7 +56,6 @@ class UndoManager:
             'files': model_files
         }
         self.save_undo_data()
-        print("Tip: You can undo this operation with: python mr_sparkru_cli.py --undo")
 
     def record_project_deletion(self, project_names: List[str]):
         """Record a project deletion operation for undo."""
@@ -65,7 +64,6 @@ class UndoManager:
             'names': project_names
         }
         self.save_undo_data()
-        print("Tip: You can undo this operation with: python mr_sparkru_cli.py --undo")
 
     def record_image_deletion(self, project_name: str, image_rowids: List[int], deleted_data: Dict):
         """Record an image deletion operation for undo."""
@@ -76,7 +74,6 @@ class UndoManager:
             'data': deleted_data  # dict with 'tensors', 'thumbnail,' etc. data as base64
         }
         self.save_undo_data()
-        print("Tip: You can undo this operation with: python mr_sparkru_cli.py --undo")
 
     def undo_last_operation(self) -> bool:
         """Perform the undo operation. Returns True if successful."""
@@ -690,7 +687,7 @@ def main():
                     project_path = documents_path / project_file
                     if project_path.exists():
                         os.remove(project_path)
-                        print(f"Deleted project file: {project_file}")
+                        silent_print(f"Deleted project file: {project_file}")
 
                 deleted_projects.append(project_name)
 

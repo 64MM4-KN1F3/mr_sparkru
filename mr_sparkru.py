@@ -774,7 +774,7 @@ class App(QMainWindow):
 
         if selected_images:
             current_item = self.projects_list.currentItem()
-            project_name = current_item.data(Qt.ItemDataRole.UserRole)
+            project_name = current_item.data(Qt.ItemDataRole.UserRole) if current_item else None
 
             # Check if we're deleting the last image and prompt user
             current_image_count = self.get_image_count(os.path.join(self.data_path, "Documents", f"{project_name}.sqlite3"))
@@ -802,8 +802,16 @@ class App(QMainWindow):
             else:
                 command = ["./mr_sparkru_cli.py", "--silent", "--delete-images", project_name] + [str(img_id) for img_id in selected_images]
                 subprocess.run(command, check=True)
-                self.display_thumbnails(current_item)  # Reselect the project
                 self.refresh_lists()
+                # Re-select the project after refresh and display thumbnails
+                if project_name:
+                    for i in range(self.projects_list.count()):
+                        item = self.projects_list.item(i)
+                        if item.data(Qt.ItemDataRole.UserRole) == project_name:
+                            self.projects_list.setCurrentItem(item)
+                            # Display thumbnails for the re-selected project
+                            self.display_thumbnails(item)
+                            break
                 self.start_deletion_animation()
 
     def undo_last_action(self):
