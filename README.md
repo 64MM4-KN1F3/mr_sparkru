@@ -6,7 +6,7 @@
 
 ## What is Mr Sparkru?!
 
-Mr Sparkru is a helper tool that assists with management of models and generated content in the Draw Things app. Primarily this assists with efficiently scrubbing your Draw Things installation clean of any unwanted models and/or generated AI slop. Please note that Mr Sparkru is quite effective so only delete models/content you no longer need!
+Mr Sparkru is a helper tool that assists with management of models and generated content in the [Draw Things](https://drawthings.ai) app. Primarily this assists with efficiently scrubbing your Draw Things installation clean of any unwanted models and/or generated AI slop. Please note that Mr Sparkru is quite effective so only delete models/content you no longer need!
 
 ## Features
 
