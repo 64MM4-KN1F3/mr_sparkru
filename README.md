@@ -16,12 +16,30 @@ Mr Sparkru is a helper tool that assists with management of models and generated
 
 ## Supported platforms
 
-MacOS
+MacOS Silicon (M1/M2/M3/M4 etc)
 
 ## Installation
+[Download](https://github.com/64MM4-KN1F3/mr_sparkru/releases/download/1.0.0/mr_sparkru.app.zip), unzip, run!
+
+## Usage
+
+### UI Application (`mr_sparkru.py`)
+
+![Mr. Sparkru](./mr_sparkru_screenshot.png)
+
+The UI application provides a graphical interface for managing your files.
+
+**Features:**
+*   **Main Window**: A custom title bar with minimize, maximize, and close buttons.
+*   **Sidebar**: Buttons for refreshing lists, deleting models, projects, and images, and undoing the last action.
+*   **Models List**: Displays a list of all available models, with options for searching and sorting.
+*   **Projects List**: Displays a list of all projects and the number of images in each, with options for searching and sorting.
+*   **Thumbnails Display**: When a project is selected, it displays thumbnails of all images in that project.
+
+### Command-Line Tool (`mr_sparkru_cli.py`)
 ## Dependencies
 
-This project utilizes `uv` for package management and virtual environment operations. Ensure you have `uv` installed. For detailed installation instructions, please refer to the official `uv` documentation.
+The CLI utilizes `uv` for package management and virtual environment operations. Ensure you have `uv` installed. For detailed installation instructions, please refer to the official `uv` documentation.
 
 No other system-level dependencies are strictly required for basic operation, but specific features might rely on underlying OS capabilities.
 
@@ -38,28 +56,6 @@ No other system-level dependencies are strictly required for basic operation, bu
     source .venv/bin/activate
     uv sync
     ```
-
-## Usage
-
-### UI Application (`mr_sparkru.py`)
-
-![Mr. Sparkru](./mr_sparkru_screenshot.png)
-
-The UI application provides a graphical interface for managing your files.
-
-**Run the application:**
-```bash
-uv run mr_sparkru.py
-```
-
-**Features:**
-*   **Main Window**: A custom title bar with minimize, maximize, and close buttons.
-*   **Sidebar**: Buttons for refreshing lists, deleting models, projects, and images, and undoing the last action.
-*   **Models List**: Displays a list of all available models, with options for searching and sorting.
-*   **Projects List**: Displays a list of all projects and the number of images in each, with options for searching and sorting.
-*   **Thumbnails Display**: When a project is selected, it displays thumbnails of all images in that project.
-
-### Command-Line Tool (`mr_sparkru_cli.py`)
 
 The command-line tool allows you to delete models, projects, and images directly from the command line.
 
