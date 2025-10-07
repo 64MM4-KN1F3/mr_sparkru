@@ -5,7 +5,6 @@ A UI application for managing Draw Things data using PyQt6.
 """
 import sys
 import os
-import subprocess
 import sqlite3
 import random
 import argparse
@@ -24,7 +23,7 @@ import io
 import flatbuffers
 import ThumbnailHistoryNode
 import ThumbnailHistoryHalfNode
-import subprocess
+import mr_sparkru_core
 
 # Global flags
 VERBOSE = False
@@ -40,6 +39,17 @@ theme = {
     "sidebar": "#2E3B4E",
     "title_bar": "#FFB1D4",
 }
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class ClickableWidget(QWidget):
     clicked = pyqtSignal(object, object)  # widget, event
@@ -250,9 +260,10 @@ class App(QMainWindow):
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.old_pos = None
 
-        self.setWindowIcon(QIcon("./images/ms.png"))
+        self.setWindowIcon(QIcon(resource_path("images/ms.png")))
         self.setWindowTitle("ミスタースパーコル")
         self.setGeometry(100, 100, 1040, 600)
+      
 
         self.data_path = os.path.expanduser(
             "~/Library/Containers/com.liuliu.draw-things/Data"
@@ -564,6 +575,9 @@ class App(QMainWindow):
         # Initialize thumbnail selection tracking
         self.last_selected_thumbnail = None
 
+        # Initialize undo manager
+        self.undo_manager = mr_sparkru_core.UndoManager(print)
+
         if DEMO_MODE:
             self.load_demo_data()
         self.refresh_lists()
@@ -584,8 +598,7 @@ class App(QMainWindow):
     def closeEvent(self, event):
         """Clear undo cache when the application exits."""
         try:
-            command = ["./mr_sparkru_cli.py", "--silent", "--clear-undo-cache"]
-            subprocess.run(command, capture_output=True)
+            mr_sparkru_core.clear_undo_cache()
         except Exception:
             # Silently ignore errors during shutdown
             pass
@@ -751,10 +764,9 @@ class App(QMainWindow):
     def delete_selected_models(self):
         selected_items = self.models_list.selectedItems()
         selected_models = [item.text() for item in selected_items]
-        
+
         if selected_models:
-            command = ["./mr_sparkru_cli.py", "--silent", "--delete-models"] + selected_models
-            subprocess.run(command, check=True)
+            mr_sparkru_core.delete_models(selected_models, self.undo_manager)
             self.refresh_lists()
             self.start_deletion_animation()
 
@@ -763,8 +775,7 @@ class App(QMainWindow):
         selected_projects = [item.data(Qt.ItemDataRole.UserRole) for item in selected_items]
 
         if selected_projects:
-            command = ["./mr_sparkru_cli.py", "--silent", "--delete-projects"] + selected_projects
-            subprocess.run(command, check=True)
+            mr_sparkru_core.delete_projects(selected_projects, self.undo_manager, lambda *args: None)
             self.refresh_lists()
             self.clear_thumbnails()
             self.start_deletion_animation()
@@ -800,8 +811,7 @@ class App(QMainWindow):
                         break
                 self.delete_selected_projects()
             else:
-                command = ["./mr_sparkru_cli.py", "--silent", "--delete-images", project_name] + [str(img_id) for img_id in selected_images]
-                subprocess.run(command, check=True)
+                mr_sparkru_core.delete_images(project_name, selected_images, self.undo_manager)
                 self.refresh_lists()
                 # Re-select the project after refresh and display thumbnails
                 if project_name:
@@ -817,9 +827,7 @@ class App(QMainWindow):
     def undo_last_action(self):
         """Undo the last deletion operation."""
         try:
-            command = ["./mr_sparkru_cli.py", "--silent", "--undo"]
-            result = subprocess.run(command, capture_output=True, text=True)
-            if result.returncode == 0:
+            if self.undo_manager.undo_last_operation():
                 # Refresh all lists and clear thumbnails after undo
                 self.refresh_lists()
                 self.clear_thumbnails()
@@ -1022,7 +1030,7 @@ class App(QMainWindow):
         return -1
 
     def set_sparkru_image(self, image_path):
-        pixmap = QPixmap(os.path.join("images", image_path))
+        pixmap = QPixmap(resource_path(os.path.join("images", image_path)))
         self.sparkru_label.setPixmap(pixmap.scaled(150, 150, Qt.AspectRatioMode.KeepAspectRatio))
         self.current_image_path = image_path
 
