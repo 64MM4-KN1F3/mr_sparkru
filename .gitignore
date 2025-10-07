@@ -11,6 +11,8 @@
 *.exe
 *.o
 *.so
+dist/
+build/
 
 # Packages #
 ############
