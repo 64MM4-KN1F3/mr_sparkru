@@ -794,7 +794,7 @@ class App(QMainWindow):
                 # Show modal dialog instead of CLI prompt
                 reply = QMessageBox.question(
                     self, 'Delete Last Images',
-                    f'This will delete the last image(s) from project "{project_name}".\n\nWould you also like to delete the entire project?',
+                    f'This will delete the last image(s) from project "{project_name}".\n\nWould you also like to delete the entire project? (ときめくものがない？)',
                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                     QMessageBox.StandardButton.No
                 )

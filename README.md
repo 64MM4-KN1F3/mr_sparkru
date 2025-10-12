@@ -10,7 +10,7 @@ Mr Sparkru is a helper tool that assists with management of models and generated
 
 ## Features
 
-*   **Model, Project, and Image Management**: Interactively delete models, projects, and images to free up disk space.
+*   **Model, Project, and Image Management**: Interactively delete models, projects, and images to free up disk space of items that no longer spark joy.
 *   **Interactive Deletion Modes**: A command-line interface for quick deletions and a graphical UI for more detailed management.
 *   **Undo Functionality**: A simple undo system to revert the last deletion action.
 
